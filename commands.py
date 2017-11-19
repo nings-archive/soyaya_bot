@@ -22,5 +22,5 @@ def whodabest(bot, update):
     if timedelta_ago < THRESHOLD_LAG:
         bot.send_message(
             chat_id=update.message.chat_id,
-            text='ning da best'
+            text='{} da best'.format(update.message.from_user.first_name)
         )
