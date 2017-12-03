@@ -1,8 +1,6 @@
 import sys, logging, logging.handlers
 import telegram
 import keys
-from cli import *
-from look import look
 from listen import listen
 
 LOG_DIR = 'volume/logs/soyaya.log'
@@ -14,10 +12,6 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', 
     level=logging.INFO, handlers=[rotating_handler]
 )
-logging.info('[__main__] program started')
 
-cli = Cli(sys.argv[1:])
-if cli.args.command == 'listen':
-    listen()
-elif cli.args.command == 'look':
-    look()
+logging.info('[__main__] program started')
+listen()
