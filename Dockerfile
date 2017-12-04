@@ -9,6 +9,6 @@ RUN apk add tzdata \
 
 RUN mkdir /soyaya_bot
 WORKDIR /soyaya_bot
-
 COPY ./soyaya/* ./soyaya/
+
 CMD python3 soyaya

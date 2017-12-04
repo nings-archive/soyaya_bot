@@ -2,7 +2,7 @@
 A simple telegram bot for USP's Saren house
 
 ## Getting Started
-You are recommended to run soyaya_bot with [docker](https://www.docker.com/get-docker), in which case docker will be the only dependency. Simply use the built in build and run scripts,
+You are recommended to run soyaya_bot with [docker](https://www.docker.com/get-docker), in which case docker will be the only dependency. Simply use the built-in build and run scripts,
 
     $ ./build.sh
     $ ./run.sh
