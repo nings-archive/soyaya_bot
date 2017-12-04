@@ -37,6 +37,7 @@ def register(bot, update):
         log_body += ', and registration successful'
     logging.info(log_body)
 
+@utils.restrict_to_registered
 def me(bot, update):
     user_id, chat_id, first_name = (
         update.message.from_user.id,
@@ -47,20 +48,14 @@ def me(bot, update):
     log_body = '[listen] [me] call by {} ({}) at {}'.format(
         user_id, first_name, chat_id
     )
-    if not this_user.is_registered():
-        bot.send_message(chat_id=chat_id, 
-            text='Please /register first!'
-        )
-        log_body += ', but user is not registered'
-    else:
-        this_user.load_data()
-        bot.send_message(
-            chat_id=chat_id,
-            text='{} {}'.format(first_name, this_user.data['me_message'])
-        )
-        log_body += ', and me_message sent'
+    this_user.load_data()
+    bot.send_message(
+        chat_id=chat_id,
+        text='{} {}'.format(first_name, this_user.data['me_message'])
+    )
     logging.info(log_body)
 
+@utils.restrict_to_registered
 @utils.restrict_to_pms
 def set_me(bot, update):
     user_id, chat_id, first_name = (

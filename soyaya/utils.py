@@ -2,6 +2,7 @@ import logging
 from telegram.ext import BaseFilter
 from functools import wraps
 from config import ACCEPTED_GROUPS
+import user
 
 class Set_me_is_active(BaseFilter):
     def __init__(self):
@@ -15,7 +16,8 @@ class Set_me_is_active(BaseFilter):
         self.users = list(filter(lambda u: u != user, self.users))
         
     def filter(self, message):
-        return message.from_user.id in self.users
+        return (message.from_user.id in self.users) if \
+            (message.from_user is not None) else False
 
 def restrict_to_pms(func):
     @wraps(func)
@@ -35,8 +37,17 @@ def restrict_to_allowed_groups(func):
             return func(bot, update)
         else:
             bot.send_message(chat_id=update.message.chat_id,
-                text='Please /register in the Asgard group chat!'
+                text='Please /register in the Asgard/Saren group chat!'
             )
     return wrapped
 
-
+def restrict_to_registered(func):
+    @wraps(func)
+    def wrapped(bot, update):
+        if user.User(update.message.from_user.id).is_registered():
+            return func(bot, update)
+        else:
+            bot.send_message(chat_id=update.message.chat_id,
+                text='Please /register in the Asgard/Saren group chat first!'
+            )
+    return wrapped
