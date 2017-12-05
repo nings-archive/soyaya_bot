@@ -1,7 +1,7 @@
 import logging
 import telegram, telegram.ext
-import user, config, utils
-from config import API_KEY
+import user, config, filters
+import restrictors as rst
 
 ABOUT_MESSAGE = '''
 `soyaya_bot` is a telegram bot for USP's Saren house.
@@ -10,10 +10,11 @@ or contact @ningyuan
 '''
 
 updater = telegram.ext.Updater(token=config.API_KEY)
-set_me_is_active = utils.Set_me_is_active()
+set_me_is_active = filters.Set_me_is_active()
 handlers = []
 
-@utils.restrict_to_allowed_groups
+@rst.restrict_to(rst.is_allowed_group,
+    'Please register in the Saren/Asgard group!')
 def register(bot, update):
     user_id, chat_id, first_name = (
         update.message.from_user.id,
@@ -37,7 +38,8 @@ def register(bot, update):
         log_body += ', and registration successful'
     logging.info(log_body)
 
-@utils.restrict_to_registered
+@rst.restrict_to(rst.is_registered,
+    'Please register first in the Saren/Asgard group!')
 def me(bot, update):
     user_id, chat_id, first_name = (
         update.message.from_user.id,
@@ -55,8 +57,10 @@ def me(bot, update):
     )
     logging.info(log_body)
 
-@utils.restrict_to_registered
-@utils.restrict_to_pms
+@rst.restrict_to(rst.is_registered,
+    'Please register first in the Saren/Asgard group!')
+@rst.restrict_to(rst.is_private_message,
+    'Please private message the bot for /set_me!')
 def set_me(bot, update):
     user_id, chat_id, first_name = (
         update.message.from_user.id,
